@@ -1,0 +1,36 @@
+extends ../layout
+
+block content
+  h1 Loan: #{loan.Book.title}
+  form(method='POST' action='/loans/' + loan.id + '/?_method=PUT')
+    p
+      label(for='book_id') Book
+      select#book_id(name='book_id')
+        each book in books
+          if book.id === loan.Book.id
+            option(value=book.id selected)=book.title
+          else
+            option(value=book.id)=book.title
+    p
+      label(for='patron_id') Patron
+      select#patron_id(name='patron_id')
+        each patron in patrons
+          if patron.id === loan.Patron.id
+            option(value=patron.id selected) #{patron.first_name} #{patron.last_name}
+          else
+            option(value=patron.id) #{patron.first_name} #{patron.last_name}
+    p
+      label(for='loaned_on') Loaned on:
+      if errorMessages.loaned_on
+        input#loaned_on(class='error-input' type='text', name='loaned_on')
+      else
+        input#loaned_on(type='text', name='loaned_on' value=loan.loaned_on)
+
+    p
+      label(for='return_by') Return by:
+      if errorMessages.return_by
+        input#return_by(class="error-input" type='text', name='return_by')
+      else
+        input#return_by(type='text', name='return_by' value=loan.return_by)
+    p
+      input(type='submit', value='Update')
